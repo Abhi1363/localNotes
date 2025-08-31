@@ -7,10 +7,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  
+
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/user", { withCredentials: true })
+    
+      .get(`${import.meta.env.VITE_API_URL}/auth/user`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => setUser(null))
       .finally(() => setLoading(false));

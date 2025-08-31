@@ -26,7 +26,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/auth/google/callback",
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     let user = await User.findOne({ googleId: profile.id });
@@ -62,7 +62,7 @@ router.get("/auth/google",
 router.get("/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("http://localhost:5173/notes");
+    res.redirect(`${process.env.FRONTEND_URL}/notes`);
   }
 );
 
@@ -77,7 +77,7 @@ router.get("/auth/logout", (req, res) => {
     if (err) return res.status(500).send("Error logging out");
     req.session.destroy();
     res.clearCookie("connect.sid");
-    res.redirect("http://localhost:5173/");
+   res.redirect(`${process.env.FRONTEND_URL}`);
   });
 });
 

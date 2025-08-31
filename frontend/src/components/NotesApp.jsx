@@ -9,9 +9,12 @@ export default function NotesApp() {
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
 
+
+
+
   useEffect(() => {
     axios
-      .get("http://localhost:5000/auth/user", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/auth/user`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => window.location.replace("/")) 
       .finally(() => setLoading(false));
@@ -22,7 +25,7 @@ export default function NotesApp() {
     if (!user) return;
 
     axios
-      .get("http://localhost:5000/notes", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/notes`, { withCredentials: true })
       .then((res) => setNotes(res.data))
       .catch((err) => console.error(err));
   }, [user]);
@@ -32,7 +35,7 @@ export default function NotesApp() {
     if (!input.trim()) return;
     try {
       const res = await axios.post(
-        "http://localhost:5000/notes",
+         axios.get(`${import.meta.env.VITE_API_URL}/api/notes`),
         { text: input },
         { withCredentials: true }
       );
@@ -46,9 +49,10 @@ export default function NotesApp() {
   // Delete note
   const deleteNote = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/notes/${id}`, {
+await axios.delete(`${import.meta.env.VITE_API_URL}/notes/${id}`)
+, {
         withCredentials: true,
-      });
+      };
       setNotes(notes.filter((note) => note._id !== id));
     } catch (err) {
       console.error("Error deleting note:", err.message);
@@ -57,7 +61,7 @@ export default function NotesApp() {
 
   // Logout
   const handleLogout = () => {
-    window.open("http://localhost:5000/auth/logout", "_self");
+    window.open(`${import.meta.env.VITE_API_URL}/auth/logout`, "_self");
   };
 
   // Filter notes by search

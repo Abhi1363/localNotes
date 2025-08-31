@@ -5,12 +5,15 @@ import logo from "../assets/logo.png";
 
 
 
+
 export default function LandingPage() {
+ 
 
  
-  const handleGoogle = () => {
-    window.open("http://localhost:5000/auth/google", "_self");
-  };
+const handleGoogle = () => {
+  window.open(`${import.meta.env.VITE_API_URL}/auth/google`, "_self");
+};
+
 
    
 
