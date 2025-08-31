@@ -15,9 +15,13 @@ mongoose.connect(process.env.MONGO_URI)
 
 
 app.use(cors({
-  origin: ["https://note-app-abhi.vercel.app/"],
+  origin: [
+    "http://localhost:5173",
+    "https://note-app-abhi.vercel.app"
+  ],
   credentials: true,
 }));
+
 app.use(express.json());
 
 app.use(session({
