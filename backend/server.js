@@ -7,17 +7,14 @@ import passport from "passport";
 import authRoutes from "./auth/auth.js";
 import "./auth/passport.js"; // Passport strategy
 import Note from "./models/Note.js";
-import session from "express-session";
 import MongoStore from "connect-mongo";
 
 dotenv.config();
 const app = express();
 
-
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log(" MongoDB connected"))
-  .catch(err => console.error(" MongoDB connection failed:", err));
-
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("❌ MongoDB connection failed:", err));
 
 app.use(cors({
   origin: process.env.FRONTEND_URL,  
@@ -25,6 +22,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -38,17 +36,16 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", authRoutes);
 
-
 const ensureAuth = (req, res, next) => {
   if (!req.user) return res.status(401).json({ message: "Not logged in" });
   next();
 };
-
 
 app.get("/notes", ensureAuth, async (req, res) => {
   try {
@@ -59,7 +56,6 @@ app.get("/notes", ensureAuth, async (req, res) => {
     res.status(500).json({ error: "Failed to fetch notes" });
   }
 });
-
 
 app.post("/notes", ensureAuth, async (req, res) => {
   const { text } = req.body;
@@ -74,7 +70,6 @@ app.post("/notes", ensureAuth, async (req, res) => {
   }
 });
 
-
 app.delete("/notes/:id", ensureAuth, async (req, res) => {
   try {
     await Note.findByIdAndDelete(req.params.id);
@@ -84,7 +79,6 @@ app.delete("/notes/:id", ensureAuth, async (req, res) => {
     res.status(500).json({ error: "Failed to delete note" });
   }
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
