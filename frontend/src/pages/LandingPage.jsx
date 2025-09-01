@@ -9,8 +9,7 @@ import logo from "../assets/logo.png";
 export default function LandingPage() {
  
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const handleGoogle = () => {
   window.open(`${API_URL}/auth/google`, "_self");
 };

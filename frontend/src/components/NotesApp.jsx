@@ -36,11 +36,7 @@ useEffect(() => {
   const addNote = async () => {
     if (!input.trim()) return;
     try {
-      const res = await axios.post(
-        `${API_URL}/notes`,
-        { text: input },
-        { withCredentials: true }
-      );
+      const res = await axios.post(`${API_URL}/notes`, { text: input }, { withCredentials: true });
       setNotes([res.data, ...notes]);
       setInput("");
     } catch (err) {
@@ -64,7 +60,7 @@ const handleLogout = async () => {
   if (!confirmLogout) return; 
 
   try {
-    await axios.get(`${API_URL}/auth/logout`, { withCredentials: true });
+   await axios.get(`${API_URL}/auth/logout`, { withCredentials: true });;
     setUser(null);
     window.location.href = "/"; // redirect manually
   } catch (err) {
