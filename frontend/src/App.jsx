@@ -7,33 +7,29 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  
-  
 
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     axios
-    
-      .get(`${import.meta.env.VITE_API_URL}/auth/user`, { withCredentials: true })
+      .get(`${API_URL}/auth/user`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setLoading(false)); // <- stop loading
+  }, [API_URL]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>; // <- prevents early redirect
 
   return (
     <Router>
       <Routes>
-       
         <Route
           path="/"
-          element={!user ? <LandingPage /> : <Navigate to="/notes" />}
+          element={user ? <Navigate to="/notes" replace /> : <LandingPage />}
         />
-      
         <Route
           path="/notes"
-          element={user ? <NotesApp user={user} /> : <Navigate to="/" />}
+          element={user ? <NotesApp user={user} /> : <Navigate to="/" replace />}
         />
       </Routes>
     </Router>
