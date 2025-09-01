@@ -9,7 +9,8 @@ router.get("/auth/google", passport.authenticate("google", { scope: ["profile", 
 router.get("/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
-    res.redirect("http://localhost:5173/notes");
+    res.redirect(`${process.env.FRONTEND_URL}/notes`);
+
   }
 );
 

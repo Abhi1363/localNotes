@@ -18,9 +18,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 // --- Middleware ---
 app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
+  origin: process.env.FRONTEND_URL,  // set this to your deployed frontend URL
+  credentials: true,
 }));
+
 app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
