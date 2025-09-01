@@ -13,7 +13,8 @@ dotenv.config();
 const app = express();
 
 
-const MONGO_URI = "mongodb+srv://1362003abhi:Abhi1363@cluster0.znatey4.mongodb.net/notesapp?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = "mongodb://1362003abhi:Abhi1363@cluster0-shard-00-00.znatey4.mongodb.net:27017,cluster0-shard-00-01.znatey4.mongodb.net:27017,cluster0-shard-00-02.znatey4.mongodb.net:27017/notesapp?ssl=true&replicaSet=atlas-bc5wvr-shard-0&authSource=admin&retryWrites=true&w=majority";
+
 
 
 mongoose.connect(MONGO_URI)
