@@ -12,7 +12,11 @@ import MongoStore from "connect-mongo";
 dotenv.config();
 const app = express();
 
-mongoose.connect(process.env.MONGO_URI)
+
+const MONGO_URI = "mongodb+srv://1362003abhi:Abhi1363@cluster0.znatey4.mongodb.net/notesapp?retryWrites=true&w=majority&appName=Cluster0";
+
+
+mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch(err => console.error("❌ MongoDB connection failed:", err));
 
@@ -24,11 +28,11 @@ app.use(cors({
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || "default_secret",
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGO_URI, 
+    mongoUrl: MONGO_URI, 
     collectionName: "sessions",
   }),
   cookie: { 
@@ -40,6 +44,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Routes
 app.use("/", authRoutes);
 
 const ensureAuth = (req, res, next) => {
