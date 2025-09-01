@@ -35,7 +35,7 @@ const handleGoogle = () => {
     
       </nav>
 
-      {/* ---------- Hero Section ---------- */}
+
       <section className="hero" id="hero">
         <img
           src="https://pngimg.com/uploads/sticky_note/sticky_note_PNG18964.png"
@@ -52,7 +52,7 @@ const handleGoogle = () => {
         </button>
       </section>
 
-      {/* ---------- About Section ---------- */}
+    
       <section className="section" id="about">
         <h2>About noteIT</h2>
         <p>
@@ -70,19 +70,18 @@ const handleGoogle = () => {
         </p>
       </section>
 
-      {/* ---------- Contact Section ---------- */}
+      
       <section className="section" id="contact">
         <h2>Contact Us</h2>
         <p>Email: support@noteit.com | Phone: +123 456 7890</p>
       </section>
 
-      {/* ---------- FAQ Section ---------- */}
       <section className="section" id="faq">
         <h2>FAQ</h2>
         <p>Q: Is noteIT free? <br />A: Yes, with optional premium features.</p>
       </section>
 
-      {/* ---------- Footer ---------- */}
+      
       <footer className="footer" >
         <p>&copy; {new Date().getFullYear()} noteIT. All rights reserved.</p>
         <div className="footer-links">
