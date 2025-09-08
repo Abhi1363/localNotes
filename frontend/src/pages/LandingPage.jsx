@@ -19,7 +19,7 @@ const handleGoogle = () => {
 
   return (
     <div className="landing-container">
-      {/* ---------- Navbar ---------- */}
+     
       <nav className="navbar">
         <div className="logo">
           <img className="logoname" src={logo} alt="App Logo" />
@@ -61,7 +61,6 @@ const handleGoogle = () => {
         </p>
       </section>
 
-      {/* ---------- Pricing Section ---------- */}
       <section className="section" id="pricing">
         <h2>Pricing</h2>
         <p>

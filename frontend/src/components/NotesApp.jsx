@@ -10,10 +10,10 @@ export default function NotesApp() {
   const [input, setInput] = useState("");
   const [search, setSearch] = useState("");
 
-  // Get API URL from env
+
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // Fetch user
+ 
   useEffect(() => {
     axios
       .get(`${API_URL}/auth/user`, { withCredentials: true })
@@ -22,9 +22,9 @@ export default function NotesApp() {
       .finally(() => setLoading(false));
   }, [API_URL]);
 
-  // Fetch notes
+  
 useEffect(() => {
-  if (!user) return; // <-- prevents unnecessary fetch
+  if (!user) return; 
   axios
     .get(`${API_URL}/notes`, { withCredentials: true })
     .then(res => setNotes(res.data))
@@ -32,7 +32,7 @@ useEffect(() => {
 }, [user, API_URL]);
 
 
-  // Add note
+  
   const addNote = async () => {
     if (!input.trim()) return;
     try {
@@ -44,7 +44,7 @@ useEffect(() => {
     }
   };
 
-  // Delete note
+ 
   const deleteNote = async (id) => {
     try {
       await axios.delete(`${API_URL}/notes/${id}`, { withCredentials: true });
@@ -62,7 +62,7 @@ const handleLogout = async () => {
   try {
    await axios.get(`${API_URL}/auth/logout`, { withCredentials: true });;
     setUser(null);
-    window.location.href = "/"; // redirect manually
+    window.location.href = "/"; 
   } catch (err) {
     console.error("Logout failed:", err);
     alert("Logout failed. Please try again.");

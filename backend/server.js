@@ -12,47 +12,51 @@ import MongoStore from "connect-mongo";
 dotenv.config();
 const app = express();
 
+// Local MongoDB URI
+const MONGO_URI = "mongodb://127.0.0.1:27017/notesapp";
 
-const MONGO_URI = "mongodb://1362003abhi:Abhi1363@cluster0-shard-00-00.znatey4.mongodb.net:27017,cluster0-shard-00-01.znatey4.mongodb.net:27017,cluster0-shard-00-02.znatey4.mongodb.net:27017/notesapp?ssl=true&replicaSet=atlas-bc5wvr-shard-0&authSource=admin&retryWrites=true&w=majority";
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected (localhost)"))
+  .catch((err) => console.error("❌ MongoDB connection failed:", err));
 
-
-
-mongoose.connect(MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch(err => console.error("❌ MongoDB connection failed:", err));
-
-app.use(cors({
-  origin: process.env.FRONTEND_URL,  
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // your Vite frontend
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || "default_secret",
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: MONGO_URI, 
-    collectionName: "sessions",
-  }),
-  cookie: { 
-    secure: process.env.NODE_ENV === "production", 
-    maxAge: 1000 * 60 * 60 * 24 // 1 day
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: MONGO_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      secure: false, // use false for localhost (true only in production/https)
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
 app.use("/", authRoutes);
 
+// Middleware: Ensure Auth
 const ensureAuth = (req, res, next) => {
   if (!req.user) return res.status(401).json({ message: "Not logged in" });
   next();
 };
 
+// Routes
 app.get("/notes", ensureAuth, async (req, res) => {
   try {
     const notes = await Note.find({ user: req.user._id }).sort({ _id: -1 });
@@ -65,7 +69,8 @@ app.get("/notes", ensureAuth, async (req, res) => {
 
 app.post("/notes", ensureAuth, async (req, res) => {
   const { text } = req.body;
-  if (!text || !text.trim()) return res.status(400).json({ message: "Note text is required" });
+  if (!text || !text.trim())
+    return res.status(400).json({ message: "Note text is required" });
   try {
     const newNote = new Note({ text: text.trim(), user: req.user._id });
     await newNote.save();
@@ -87,4 +92,4 @@ app.delete("/notes/:id", ensureAuth, async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));

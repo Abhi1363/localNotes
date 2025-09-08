@@ -15,10 +15,10 @@ function App() {
       .get(`${API_URL}/auth/user`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => setUser(null))
-      .finally(() => setLoading(false)); // <- stop loading
+      .finally(() => setLoading(false)); 
   }, [API_URL]);
 
-  if (loading) return <div>Loading...</div>; // <- prevents early redirect
+  if (loading) return <div>Loading...</div>; 
 
   return (
     <Router>
